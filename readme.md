@@ -1,4 +1,4 @@
-# Social authentication with Laravel and Nuxt 
+# Authentication with Laravel and Nuxt 
 
 Welcome, this repo contains the end result of the series [Authentication in Laravel and Nuxt](https://www.youtube.com/playlist?list=PLeZmuYT0mSPNmQie2QyoY-3hxQxDZwi22) and [social Authentication in Laravel and Nuxt](https://www.youtube.com/playlist?list=PLeZmuYT0mSPPeyIMa6oURCgpCMEd_sD_n)
 
