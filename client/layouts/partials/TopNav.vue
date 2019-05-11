@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b-navbar type="light" variant="light" toggleable>
+        <b-navbar type="light" variant="light" toggleable="lg">
             <div class="container">
                 <nuxt-link class="navbar-brand" to="/">Jwt-Auth</nuxt-link>
 
