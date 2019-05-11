@@ -71,6 +71,20 @@ class LoginController extends Controller
         // user surpasses their maximum number of attempts they will get locked out.
         $this->incrementLoginAttempts($request);
 
+        // attempt login with token
+        if ($request->input('token')) {
+            $this->auth->setToken($request->input('token'));
+
+            $user = $this->auth->authenticate();
+            if ($user) {
+                return response()->json([
+                    'success' => true,
+                    'data' => $request->user(),
+                    'token' => $request->input('token')
+                ], 200);
+            }
+        }
+
         try {
             if (!$token = $this->auth->attempt($request->only('email', 'password'))) {
                 return response()->json([

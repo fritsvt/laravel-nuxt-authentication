@@ -1,7 +1,14 @@
 <template>
     <div class="container">
-        <div class="col-md-6 offset-md-3">
-            <div class="card mt-4">
+        <div class="col-md-6 offset-md-3 mt-4">
+
+            <div v-if="error" class="alert alert-danger mb-2" role="alert">
+                Your token appeared to be invalid. Please try again.
+            </div>
+
+            <social-login />
+
+            <div class="card">
                 <div class="card-header">
                     <p class="mb-0">Register</p>
                 </div>
@@ -29,7 +36,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <input type="submit" value="Register" class="btn btn-default w-100">
+                            <input type="submit" value="Register" class="btn btn-light w-100">
                         </div>
                     </form>
                 </div>
@@ -39,21 +46,30 @@
 </template>
 
 <script>
+import SocialLogin from '@/components/SocialLogin';
+
 export default {
     middleware: 'guest',
+    components: {
+        SocialLogin
+    },
     data() {
         return {
             form: {
                 name: '',
                 email: '',
                 password: ''
-            }
+            },
+            error: this.$route.query.error
         }
     },
     methods: {
         async register() {
-            await this.$axios.post('/auth/register', this.form);
-
+            try {
+                await this.$axios.post('/auth/register', this.form);
+            } catch(e) {
+                return;
+            }
             this.$auth.login({data: this.form});
             
             this.$router.push({name: 'index'});
