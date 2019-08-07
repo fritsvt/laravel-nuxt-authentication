@@ -28,13 +28,9 @@ class SocialLoginController extends Controller
     {
         try {
             $serviceUser = Socialite::driver($service)->stateless()->user();
+            $email = $serviceUser->getEmail();
         } catch (\Exception $e) {
             return redirect(env('CLIENT_BASE_URL') . '/auth/social-callback?error=Unable to login using ' . $service . '. Please try again' . '&origin=login');
-        }
-
-        $email = $serviceUser->getEmail();
-        if ($service != 'google') {
-            $email = $serviceUser->getId() . '@' . $service . '.local';
         }
 
         $user = $this->getExistingUser($serviceUser, $email, $service);
@@ -66,13 +62,8 @@ class SocialLoginController extends Controller
 
     public function getExistingUser($serviceUser, $email, $service)
     {
-        if ($service == 'google') {
-            return User::where('email', $email)->orWhereHas('social', function($q) use ($serviceUser, $service) {
-                $q->where('social_id', $serviceUser->getId())->where('service', $service);
-            })->first();
-        } else {
-            $userSocial = UserSocial::where('social_id', $serviceUser->getId())->first();
-            return $userSocial ? $userSocial->user : null;
-        }
+        return User::where('email', $email)->orWhereHas('social', function ($q) use ($serviceUser, $service) {
+            $q->where('social_id', $serviceUser->getId())->where('service', $service);
+        })->first();
     }
 }
