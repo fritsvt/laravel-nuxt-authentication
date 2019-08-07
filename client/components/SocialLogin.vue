@@ -9,6 +9,12 @@
         <button @click="socialLogin('facebook')" class="social-login-btn facebook">
             <i class="fab fa-facebook"></i>
         </button>
+        <button @click="socialLogin('twitter')" class="social-login-btn twitter">
+            <i class="fab fa-twitter"></i>
+        </button>
+        <button @click="socialLogin('linkedin')" class="social-login-btn linkedin">
+            <i class="fab fa-linkedin"></i>
+        </button>
     </div>
 </template>
 
