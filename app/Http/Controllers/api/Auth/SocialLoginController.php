@@ -28,11 +28,11 @@ class SocialLoginController extends Controller
     {
         try {
             $serviceUser = Socialite::driver($service)->stateless()->user();
-            $email = $serviceUser->getEmail();
         } catch (\Exception $e) {
             return redirect(env('CLIENT_BASE_URL') . '/auth/social-callback?error=Unable to login using ' . $service . '. Please try again' . '&origin=login');
         }
 
+        $email = $serviceUser->getEmail();
         $user = $this->getExistingUser($serviceUser, $email, $service);
         $newUser = false;
         if (!$user) {
