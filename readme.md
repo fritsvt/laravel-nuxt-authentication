@@ -88,6 +88,12 @@ Example:
 
 ```
 
+Change this setting, if needed. 
+If set, we will save the email that comes back from social login, regardless of whether or not it has been verified by the provider (Google is the only one that does this right now). If not set, we will store a dummy email to the DB like: 'linkedin-id123456@linkedin.local'
+```
+RETRIEVE_UNVERIFIED_SOCIAL_EMAIL=0
+```
+
 IMPORTANT: Make sure that your .env file is updated with the right settings for APP_URL (for your back-end APIs) and CLIENT_BASE_URL (for your front-end / Nuxt). These values need to match what you will set in the client-side setup section.
 
 ```
