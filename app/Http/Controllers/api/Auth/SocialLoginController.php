@@ -32,9 +32,10 @@ class SocialLoginController extends Controller
             return redirect(env('CLIENT_BASE_URL') . '/auth/social-callback?error=Unable to login using ' . $service . '. Please try again' . '&origin=login');
         }
 
-        $email = $serviceUser->getEmail();
-        if ($service != 'google') {
+        if ((env('RETRIEVE_UNVERIFIED_SOCIAL_EMAIL') == 0) && ($service != 'google')) {
             $email = $serviceUser->getId() . '@' . $service . '.local';
+        } else {
+            $email = $serviceUser->getEmail();
         }
 
         $user = $this->getExistingUser($serviceUser, $email, $service);
@@ -66,13 +67,12 @@ class SocialLoginController extends Controller
 
     public function getExistingUser($serviceUser, $email, $service)
     {
-        if ($service == 'google') {
-            return User::where('email', $email)->orWhereHas('social', function($q) use ($serviceUser, $service) {
-                $q->where('social_id', $serviceUser->getId())->where('service', $service);
-            })->first();
-        } else {
+        if ((env('RETRIEVE_UNVERIFIED_SOCIAL_EMAIL') == 0) && ($service != 'google')) {
             $userSocial = UserSocial::where('social_id', $serviceUser->getId())->first();
             return $userSocial ? $userSocial->user : null;
         }
+        return User::where('email', $email)->orWhereHas('social', function($q) use ($serviceUser, $service) {
+            $q->where('social_id', $serviceUser->getId())->where('service', $service);
+        })->first();
     }
 }
